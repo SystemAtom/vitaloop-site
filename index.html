@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vitaloop — Patient Recall for Diagnostic Labs</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:       #0f1a14;
+      --forest:    #1a3d2b;
+      --sage:      #2d6a4f;
+      --mint:      #52b788;
+      --mist:      #f0f7f2;
+      --white:     #ffffff;
+      --mid:       #6b7c72;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #e5ede8;
+      padding: 0 5vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      color: var(--forest);
+      letter-spacing: -0.02em;
+    }
+
+    .logo span {
+      color: var(--mint);
+    }
+
+    nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--mid);
+      text-decoration: none;
+    }
+
+    nav a:hover { color: var(--forest); }
+
+    /* HERO */
+    .hero {
+      min-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 5vw 60px;
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -80px;
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, #c7ead8 0%, transparent 70%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--forest);
+      max-width: 800px;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--sage);
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--mid);
+      max-width: 520px;
+      margin-bottom: 44px;
+      line-height: 1.7;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.4rem;
+      color: var(--forest);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--mid);
+      margin-top: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: #e5ede8;
+      margin: 0 5vw;
+    }
+
+    /* HOW IT WORKS */
+    .section {
+      padding: 80px 5vw;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--mint);
+      margin-bottom: 12px;
+    }
+
+    .section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      color: var(--forest);
+      letter-spacing: -0.02em;
+      margin-bottom: 48px;
+      max-width: 560px;
+      line-height: 1.2;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+    }
+
+    .step {
+      padding: 32px 28px;
+      background: var(--mist);
+      border-radius: 12px;
+      border: 1px solid #daeee3;
+      position: relative;
+    }
+
+    .step-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3rem;
+      color: #c7ead8;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    .step h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--forest);
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      font-size: 0.9rem;
+      color: var(--mid);
+      line-height: 1.6;
+    }
+
+    /* FOR LABS */
+    .for-labs {
+      background: var(--mist);
+      padding: 80px 5vw;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .two-col { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    .benefit-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 32px;
+    }
+
+    .benefit-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 0.95rem;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    .benefit-list li::before {
+      content: '→';
+      color: var(--mint);
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .pull-quote {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: var(--forest);
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      padding-left: 24px;
+      border-left: 3px solid var(--mint);
+    }
+
+    /* CONTACT */
+    .contact {
+      padding: 80px 5vw;
+      text-align: center;
+    }
+
+    .contact h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      color: var(--forest);
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .contact p {
+      color: var(--mid);
+      margin-bottom: 32px;
+      font-size: 1rem;
+    }
+
+    .contact a.cta {
+      display: inline-block;
+      padding: 14px 36px;
+      background: var(--forest);
+      color: var(--white);
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .contact a.cta:hover { background: var(--sage); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid #e5ede8;
+      padding: 28px 5vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer .logo { font-size: 1.1rem; }
+
+    footer p {
+      font-size: 0.8rem;
+      color: var(--mid);
+    }
+
+    @media (max-width: 600px) {
+      .stat-row { gap: 32px; }
+      .hero { padding-top: 60px; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">Vita<span>loop</span></div>
+    <a href="mailto:hello@vitaloop.co.in">hello@vitaloop.co.in</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">Patient Recall for Diagnostic Labs</p>
+    <h1>Your patients are due.<br /><em>Bring them back.</em></h1>
+    <p class="hero-sub">
+      Vitaloop calls your existing patients in their own language — Hindi, Kannada, Tamil — reminds them their test is due, and books them back in. You only pay when a patient returns.
+    </p>
+    <div class="stat-row">
+      <div class="stat">
+        <span class="stat-num">85%</span>
+        <span class="stat-label">of Indian labs have no recall system</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">5–7×</span>
+        <span class="stat-label">cheaper to retain than acquire a patient</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">₹0</span>
+        <span class="stat-label">upfront — success fee only</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <p class="section-label">How it works</p>
+    <h2>Three steps. No software to install.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Share your patient list</h3>
+        <p>Send us a simple export of past patients — name, phone, last visit, test type. We handle everything from there.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>We call and remind</h3>
+        <p>Our AI agent calls each due patient in their own language, reminds them politely, and offers to book a slot.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>You get bookings</h3>
+        <p>Confirmed slots arrive in your existing workflow. We send a WhatsApp confirmation to the patient. You collect as normal.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h3>Pay only on results</h3>
+        <p>We charge a small percentage of the revenue we actually recover. If no patients return, you owe nothing.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FOR LABS -->
+  <section class="for-labs">
+    <div class="two-col">
+      <div>
+        <p class="section-label">Built for Indian labs</p>
+        <h2 style="margin-bottom: 0;">Revenue you already earned, slipping away quietly.</h2>
+        <ul class="benefit-list">
+          <li>Calls in Hindi, Kannada, Tamil, Telugu and more — patients respond when they understand</li>
+          <li>Covers annual full-body checks, HbA1c, thyroid, cardiac panels and more</li>
+          <li>Works alongside your existing lab software — no integration needed</li>
+          <li>Every call supervised and recorded — you stay in control</li>
+          <li>Fully compliant with DPDP and TRAI guidelines</li>
+        </ul>
+      </div>
+      <div>
+        <p class="pull-quote">"The patients were already yours. We just remind them to come back."</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT -->
+  <section class="contact">
+    <h2>Start a free pilot for your lab</h2>
+    <p>No commitment. We run the first cohort at our cost and show you the numbers.</p>
+    <a class="cta" href="mailto:hello@vitaloop.co.in">Get in touch</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo">Vita<span>loop</span></div>
+    <p>© 2026 Novara Systems Pvt Ltd. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
